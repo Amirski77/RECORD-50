@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, redirect, session, flash
+from flask import Flask, render_template, request, redirect, session, flash, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
+import requests
 import db
 from db import get_db
 
@@ -75,3 +76,37 @@ def logout():
     session.clear()
     flash("Logged out")
     return redirect("/")
+
+@app.route("/api/search")
+def search():
+    query = request.args.get("q", "").strip()[:100]
+
+    if not query:
+        return jsonify({"results": []})
+
+    try:
+        response = requests.get("https://itunes.apple.com/search",
+        params={
+            "term": query, 
+            "media": "music",
+            "entity": "song", 
+            "limit": 25,
+        },
+        timeout=5,
+        )
+        response.raise_for_status()
+        data = response.json()
+    except (requests.RequestException, ValueError):
+        return jsonify({"results": []}), 502
+
+    results = []
+    for track in data.get("results", []):
+        results.append({
+            "track_id": track.get("trackId"),
+            "track_name": track.get("trackName"),
+            "artist_name": track.get("artistName"),
+            "album_art_url": track.get("artworkUrl100"),
+            "preview_url": track.get("previewUrl"),
+        })
+
+    return jsonify({"results": results})

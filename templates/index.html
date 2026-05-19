@@ -1,5 +1,11 @@
 {% extends "layout.html" %}
 
 {% block content %}
+    {% if session.user_id %}
+    <p>Welcome back, {{ session.username }}!</p>
+    <p>What's your record for today?</p>
+    {% else %}
     <p>Welcome to RECORD. One song a day.</p>
+    <p><a href="/register">Get started</a> or <a href="/login">Log in</a>.</p>
+    {% endif %}
 {% endblock %}

@@ -11,6 +11,7 @@
             <h1>RECORD</h1>
             <nav>
                 {% if session.user_id %}
+                    <a href="/search">Search</a>
                     <span>{{ session.username }}</span>
                     <a href="/logout">Logout</a>
                 {% else %}

@@ -3,6 +3,16 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import requests
 import db
 from db import get_db
+from functools import wraps
+
+def login_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if "user_id" not in session:
+            flash("Please log in first")
+            return redirect("/login")
+        return f(*args, **kwargs)
+    return decorated
 
 app = Flask(__name__)
 app.secret_key = "dev-secret-change-me"
@@ -110,3 +120,8 @@ def search():
         })
 
     return jsonify({"results": results})
+
+@app.route("/search")
+@login_required
+def search_page():
+    return render_template("search.html")

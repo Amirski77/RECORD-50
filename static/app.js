@@ -1,0 +1,97 @@
+const input = document.querySelector("#search-input");
+const results = document.querySelector("#search-results");
+const statusEl = document.querySelector("#search-status");
+
+if (input) {
+    let debounceTimer;
+    let abortController = null;
+
+    input.addEventListener("input", () => {
+        clearTimeout(debounceTimer);
+
+        debounceTimer = setTimeout(async () => {
+            const query = input.value.trim();
+        // 1. ALWAYS cancel previous pending requests first, regardless of what the query is
+            if (abortController) {
+                abortController.abort();
+            }
+        // 2. Now handle the empty input state safely
+            if (!query) {
+                results.innerHTML = "";
+                statusEl.textContent = "";
+                return;
+            }
+        // 3. Now create a new abort controller for the new request
+            abortController = new AbortController();
+        // 4. Update the status text to indicate that we're searching
+            statusEl.textContent = "Searching...";
+
+            try {
+                // 5. Make the actual API request
+                const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`, {
+                    signal: abortController.signal
+                });
+
+                // 6. Handle errors
+                if (!response.ok) {
+                    throw new Error("Server error");
+                }
+
+                // 7. Parse the response
+                const data = await response.json();
+
+                // 8. Update the status text to indicate that we're done searching
+                statusEl.textContent = "";
+                // 9. Clear the results
+                results.innerHTML = "";
+
+                if (!data.results || data.results.length === 0) {
+                    statusEl.textContent = "No results found.";
+                    abortController = null;
+                    return;
+                }
+
+                // 10. Create a document fragment to hold the results
+                const fragment = document.createDocumentFragment();
+
+                for (const track of data.results) {
+                    const tile = document.createElement("div");
+                    tile.className = "search-tile";
+
+                    const img = document.createElement("img");
+                    img.src = track.album_art_url;
+                    img.alt = `${track.track_name} album art`;
+
+                    const info = document.createElement("div");
+                    info.className = "search-tile-info";
+
+                    const trackName = document.createElement("div");
+                    trackName.className = "search-tile-name";
+                    trackName.textContent = track.track_name;
+
+                    const artistName = document.createElement("div");
+                    artistName.className = "search-tile-artist";
+                    artistName.textContent = track.artist_name;
+
+                    info.appendChild(trackName);
+                    info.appendChild(artistName);
+                    tile.appendChild(img);
+                    tile.appendChild(info);
+
+                    fragment.appendChild(tile);
+                }
+
+                results.appendChild(fragment);
+                abortController = null;
+                // 11. Reset the abort controller for the next request
+            } catch (error) {
+                if (error.name !== "AbortError") {
+                    abortController = null;
+                    console.error("Search failed:", error);
+                    statusEl.textContent = "Something went wrong. Please try again.";
+                    results.innerHTML = "";
+                }
+            }
+        }, 300);
+    });
+}

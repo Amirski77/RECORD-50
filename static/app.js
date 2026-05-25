@@ -5,6 +5,7 @@ const statusEl = document.querySelector("#search-status");
 if (input) {
     let debounceTimer;
     let abortController = null;
+    let selectedTrack = null;
 
     input.addEventListener("input", () => {
         clearTimeout(debounceTimer);
@@ -19,12 +20,14 @@ if (input) {
             if (!query) {
                 results.innerHTML = "";
                 statusEl.textContent = "";
+                selectedTrack = null;
                 return;
             }
         // 3. Now create a new abort controller for the new request
             abortController = new AbortController();
         // 4. Update the status text to indicate that we're searching
             statusEl.textContent = "Searching...";
+            selectedTrack = null;
 
             try {
                 // 5. Make the actual API request
@@ -42,11 +45,10 @@ if (input) {
 
                 // 8. Update the status text to indicate that we're done searching
                 statusEl.textContent = "";
-                // 9. Clear the results
-                results.innerHTML = "";
 
                 if (!data.results || data.results.length === 0) {
                     statusEl.textContent = "No results found.";
+                    results.innerHTML = "";
                     abortController = null;
                     return;
                 }
@@ -78,10 +80,18 @@ if (input) {
                     tile.appendChild(img);
                     tile.appendChild(info);
 
+                    tile.addEventListener("click", () => {
+                        document.querySelectorAll(".search-tile").forEach(el => {
+                            el.classList.remove("selected");
+                        });
+                        // 12. Update the selected track and add the selected class to the clicked tile
+                        tile.classList.add("selected");
+                        selectedTrack = track;
+                    });
+                    // 13. Append the tile to the fragment
                     fragment.appendChild(tile);
                 }
-
-                results.appendChild(fragment);
+                results.replaceChildren(fragment);
                 abortController = null;
                 // 11. Reset the abort controller for the next request
             } catch (error) {

@@ -4,6 +4,7 @@ import requests
 import db
 from db import get_db
 from functools import wraps
+from datetime import datetime, timezone
 
 def login_required(f):
     @wraps(f)
@@ -125,3 +126,54 @@ def search():
 @login_required
 def search_page():
     return render_template("search.html")
+
+@app.route("/post", methods=["POST"])
+@login_required
+def post_record():
+    track_id = request.form.get("track_id", "").strip()
+    track_name = request.form.get("track_name", "").strip()
+    artist_name = request.form.get("artist_name", "").strip()
+    album_art_url = request.form.get("album_art_url", "").strip()
+    preview_url = request.form.get("preview_url", "").strip() or None
+    note = request.form.get("note", "").strip()
+
+    if not (track_id and track_name and artist_name and album_art_url):
+        flash("Missing track info - pick a song first")
+        return redirect("/search")
+
+    if len(note) > 280:
+        flash("Note too long (max 280 characters).")
+        return redirect("/search")
+
+    conn = get_db()
+
+    today_utc = datetime.now(timezone.utc).date().isoformat()
+    already_posted = conn.execute(
+        "SELECT id FROM posts WHERE user_id = ? AND DATE(created_at) = ?",
+        (session["user_id"], today_utc),
+    ).fetchone()
+
+    if already_posted:
+        flash("You've already posted a song today. Come back tomorrow!")
+        return redirect("/search")
+
+    conn.execute(
+        """
+        INSERT INTO posts (user_id, track_id, track_name, artist_name, album_art_url, preview_url, note)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+        """,
+        (
+            session["user_id"], 
+            track_id, 
+            track_name, 
+            artist_name, 
+            album_art_url, 
+            preview_url, 
+            note or None,
+        ),
+    )
+    conn.commit()
+
+    flash("Your record is posted!")
+    return redirect("/")
+

@@ -49,3 +49,12 @@ body {
     color: #666;
     font-size: 0.9rem;
 }
+
+.search-tile.selected {
+    background: #1a1a1a;
+    color: white;
+}
+
+.search-tile.selected .search-tile-artist {
+    color: #aaa;
+}

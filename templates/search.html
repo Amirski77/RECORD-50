@@ -7,5 +7,28 @@
 
     <div id ="search-status"></div>
     <div id="search-results"></div>
-    
+
+    <div id="post-panel" hidden>
+        <h3>Post this record</h3>
+        <div id="preview-track">
+            <img id="preview-art" src="" alt="">
+            <div>
+                <div id="preview-name"></div>
+                <div id="preview-artist"></div>
+            </div>
+        </div>
+
+        <form action="/post" method="post">
+            <input type="hidden" name="track_id" id="form-track-id">
+            <input type="hidden" name="track_name" id="form-track-name">
+            <input type="hidden" name="artist_name" id="form-artist-name">
+            <input type="hidden" name="album_art_url" id="form-album-art-url">
+            <input type="hidden" name="preview_url" id="form-preview-url">
+
+            <textarea name="note" id="form-note" placeholder="Optional note (max 280 chars)" maxlength="280" rows="3"></textarea>
+            <div id="char-count">0 / 280</div>
+
+            <button type="submit">Post record</button>
+        </form>
+    </div>
 {% endblock %}

@@ -21,8 +21,26 @@ db.init_app(app)
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    if "user_id" not in session:
+        return render_template("index.html")
 
+    conn = get_db()
+    today_utc = datetime.now(timezone.utc).date().isoformat()
+
+    posts = conn.execute(
+        """
+        SELECT posts.id, posts.track_name, posts.artist_name, posts.album_art_url, posts.preview_url, posts.note, posts.created_at, users.username
+        FROM posts
+        JOIN users ON posts.user_id = users.id
+        WHERE DATE(posts.created_at) = ?
+        ORDER BY posts.created_at DESC
+        """,
+        (today_utc,),
+    ).fetchall()
+
+    user_posted_today = any(p["username"] == session["username"] for p in posts)
+
+    return render_template("index.html", posts=posts, user_posted_today=user_posted_today)
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":

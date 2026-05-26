@@ -1,11 +1,37 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    {% if session.user_id %}
-    <p>Welcome back, {{ session.username }}!</p>
-    <p>What's your record for today?</p>
+    {% if not session.user_id %}
+        <p>Welcome to RECORD. One song a day.</p>
+        <p><a href="/register">Get started</a> or <a href="/login">log in</a>.</p>
+
     {% else %}
-    <p>Welcome to RECORD. One song a day.</p>
-    <p><a href="/register">Get started</a> or <a href="/login">Log in</a>.</p>
+        <h2>Today's records</h2>
+
+        {% if not user_posted_today %}
+            <p>You haven't posted yet today. <a href="/search">Pick your song.</a></p>
+        {% else %}
+            <p>You've posted today. Come back tomorrow for a fresh feed.</p>
+        {% endif %}
+
+        {% if posts %}
+            <div class="feed">
+                {% for post in posts %}
+                    <article class="feed-item">
+                        <img src="{{ post.album_art_url }}" alt="{{ post.track_name }} album art">
+                        <div class="feed-item-body">
+                            <div class="feed-item-username">{{ post.username }}</div>
+                            <div class="feed-item-track">{{ post.track_name }}</div>
+                            <div class="feed-item-artist">{{ post.artist_name }}</div>
+                            {% if post.note %}
+                                <div class="feed-item-note">{{ post.note }}</div>
+                            {% endif %}
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No records posted today yet. Be the first.</p>
+        {% endif %}
     {% endif %}
 {% endblock %}

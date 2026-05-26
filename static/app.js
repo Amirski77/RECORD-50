@@ -21,6 +21,8 @@ if (input) {
                 results.innerHTML = "";
                 statusEl.textContent = "";
                 selectedTrack = null;
+                const panel = document.querySelector("#post-panel");
+                if (panel) panel.hidden = true;
                 return;
             }
         // 3. Now create a new abort controller for the new request
@@ -28,6 +30,8 @@ if (input) {
         // 4. Update the status text to indicate that we're searching
             statusEl.textContent = "Searching...";
             selectedTrack = null;
+            const panel = document.querySelector("#post-panel");
+            if (panel) panel.hidden = true;
 
             try {
                 // 5. Make the actual API request
@@ -87,6 +91,7 @@ if (input) {
                         // 12. Update the selected track and add the selected class to the clicked tile
                         tile.classList.add("selected");
                         selectedTrack = track;
+                        showPostPanel(track);
                     });
                     // 13. Append the tile to the fragment
                     fragment.appendChild(tile);
@@ -103,5 +108,31 @@ if (input) {
                 }
             }
         }, 300);
+    });
+}
+function showPostPanel(track) {
+    const panel = document.querySelector("#post-panel");
+    if (!panel) return;
+
+    document.querySelector("#preview-art").src = track.album_art_url;
+    document.querySelector("#preview-art").alt = `${track.track_name} album art`;
+    document.querySelector("#preview-name").textContent = track.track_name;
+    document.querySelector("#preview-artist").textContent = track.artist_name;
+
+    document.querySelector("#form-track-id").value = track.track_id;
+    document.querySelector("#form-track-name").value = track.track_name;
+    document.querySelector("#form-artist-name").value = track.artist_name;
+    document.querySelector("#form-album-art-url").value = track.album_art_url;
+    document.querySelector("#form-preview-url").value = track.preview_url ||"";
+
+    panel.hidden = false;
+    panel.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+const noteInput = document.querySelector("#form-note");
+const charCount = document.querySelector("#char-count");
+if (noteInput && charCount) {
+    noteInput.addEventListener("input", () => {
+        charCount.textContent = `${noteInput.value.length} / 280`;
     });
 }

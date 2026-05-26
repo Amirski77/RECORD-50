@@ -58,3 +58,97 @@ body {
 .search-tile.selected .search-tile-artist {
     color: #aaa;
 }
+
+#post-panel {
+    margin-top: 2rem;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    max-width: 600px;
+}
+
+#preview-track {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+#preview-art {
+    width: 80px;
+    height: 80px;
+    border-radius: 4px;
+}
+
+#preview-name {
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+#preview-artist {
+    color: #666;
+}
+
+#form-note {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1rem;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+#char-count {
+    font-size: 0.8rem;
+    color: #666;
+    text-align: right;
+    margin-bottom: 0.5rem;
+}
+
+.feed {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1rem;
+    max-width: 600px;
+}
+
+.feed-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid #eee;
+    border-radius: 8px;
+}
+
+.feed-item img {
+    width: 80px;
+    height: 80px;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.feed-item-body {
+    flex: 1;
+}
+
+.feed-item-username {
+    font-size: 0.8rem;
+    color: #666;
+    margin-bottom: 0.25rem;
+}
+
+.feed-item-track {
+    font-weight: 600;
+}
+
+.feed-item-artist {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.feed-item-note {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: #f7f7f7;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}

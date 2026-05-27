@@ -1,4 +1,5 @@
 import sqlite3
+import os
 from flask import g
 
 DATABASE = "record.db"
@@ -17,9 +18,6 @@ def close_db(e=None):
 
 def init_app(app):
     app.teardown_appcontext(close_db)
-
-import os
-
 
 def init_db(app):
     """Create the database and the tables if they don't exist."""

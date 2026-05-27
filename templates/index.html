@@ -17,18 +17,25 @@
         {% if posts %}
             <div class="feed">
                 {% for post in posts %}
-                    <article class="feed-item">
+                <article class="feed-item">
+                    <div class="feed-art-wrap">
                         <img src="{{ post.album_art_url }}" alt="{{ post.track_name }} album art">
-                        <div class="feed-item-body">
-                            <div class="feed-item-username">
-                                <a href="/user/{{ post.username }}">{{ post.username }}</a>
-                            </div>
-                            <div class="feed-item-track">{{ post.track_name }}</div>
-                            <div class="feed-item-artist">{{ post.artist_name }}</div>
-                            {% if post.note %}
-                                <div class="feed-item-note">{{ post.note }}</div>
-                            {% endif %}
+                        {% if post.preview_url %}
+                            <button class="play-btn" data-preview="{{ post.preview_url }}" aria-label="Play preview">
+                                <span class="play-icon">▶</span>
+                            </button>
+                        {% endif %}
+                    </div>
+                    <div class="feed-item-body">
+                        <div class="feed-item-username">
+                            <a href="/user/{{ post.username }}">{{ post.username }}</a>
                         </div>
+                        <div class="feed-item-track">{{ post.track_name }}</div>
+                        <div class="feed-item-artist">{{ post.artist_name }}</div>
+                        {% if post.note %}
+                            <div class="feed-item-note">{{ post.note }}</div>
+                        {% endif %}
+                    </div>
                     </article>
                 {% endfor %}
             </div>

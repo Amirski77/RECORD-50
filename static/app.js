@@ -136,3 +136,52 @@ if (noteInput && charCount) {
         charCount.textContent = `${noteInput.value.length} / 280`;
     });
 }
+
+let currentAudio = null;
+let currentButton = null;
+
+function playPreview(button) {
+    const url = button.dataset.preview;
+    if (!url) return;
+
+    if (currentButton === button) {
+        currentAudio.pause();
+        resetButton(button);
+        currentAudio = null;
+        currentButton = null;
+        return;
+    }
+
+    if (currentAudio) {
+        currentAudio.pause();
+        if (currentButton) resetButton(currentButton);
+    }
+
+    const audio = new Audio(url);
+    audio.play().catch(err => {
+        console.error("Audio playback failed:", err);
+        resetButton(button);
+    });
+
+    audio.addEventListener("ended", () => {
+        resetButton(button);
+        currentAudio = null;
+        currentButton = null;
+    });
+
+    button.classList.add("playing");
+    button.querySelector(".play-icon").textContent = "⏸";
+
+    currentAudio = audio;
+    currentButton = button;
+}
+
+function resetButton(button) {
+    button.classList.remove("playing");
+    const icon = button.querySelector(".play-icon");
+    if (icon) icon.textContent = "▶";
+}
+
+document.querySelectorAll(".play-btn").forEach(btn => {
+    btn.addEventListener("click", () => playPreview(btn));
+});

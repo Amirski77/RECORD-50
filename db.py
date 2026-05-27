@@ -2,7 +2,8 @@ import sqlite3
 import os
 from flask import g
 
-DATABASE = "record.db"
+DATA_DIR = os.environ.get("DATA_DIR", ".")
+DATABASE = os.path.join(DATA_DIR, "record.db")
 
 def get_db():
     if 'db' not in g:

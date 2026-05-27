@@ -20,7 +20,9 @@
                     <article class="feed-item">
                         <img src="{{ post.album_art_url }}" alt="{{ post.track_name }} album art">
                         <div class="feed-item-body">
-                            <div class="feed-item-username">{{ post.username }}</div>
+                            <div class="feed-item-username">
+                                <a href="/user/{{ post.username }}">{{ post.username }}</a>
+                            </div>
                             <div class="feed-item-track">{{ post.track_name }}</div>
                             <div class="feed-item-artist">{{ post.artist_name }}</div>
                             {% if post.note %}

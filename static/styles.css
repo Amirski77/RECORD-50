@@ -152,3 +152,22 @@ body {
     border-radius: 4px;
     font-size: 0.9rem;
 }
+
+.profile-header {
+    margin-bottom: 1.5rem;
+}
+
+.profile-header h2 {
+    margin-bottom: 0.25rem;
+}
+
+.profile-meta {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.feed-item-date {
+    color: #999;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+}

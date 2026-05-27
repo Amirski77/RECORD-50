@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="profile-header">
+        <h2>{{ profile_user.username }}</h2>
+        <p class="profile-meta">{{ posts|length }} record{{ "s" if posts|length != 1 else "" }} · joined {{ profile_user.created_at[:10] }}</p>
+    </div>
+
+    {% if posts %}
+        <div class="feed">
+            {% for post in posts %}
+                <article class="feed-item">
+                    <img src="{{ post.album_art_url }}" alt="{{ post.track_name }} album art">
+                    <div class="feed-item-body">
+                        <div class="feed-item-track">{{ post.track_name }}</div>
+                        <div class="feed-item-artist">{{ post.artist_name }}</div>
+                        <div class="feed-item-date">{{ post.created_at[:10] }}</div>
+                        {% if post.note %}
+                            <div class="feed-item-note">{{ post.note }}</div>
+                        {% endif %}
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No records yet.</p>
+    {% endif %}
+{% endblock %}

@@ -195,3 +195,27 @@ def post_record():
     flash("Your record is posted!")
     return redirect("/")
 
+@app.route("/user/<username>")
+def profile(username):
+    conn = get_db()
+
+    user = conn.execute(
+        "SELECT id, username, created_at FROM users WHERE username = ?",
+        (username,)
+    ).fetchone()
+
+    if user is None:
+        flash("User not found")
+        return redirect("/")
+
+    posts = conn.execute(
+        """
+        SELECT id, track_name, artist_name, album_art_url, preview_url, note, created_at 
+        FROM posts 
+        WHERE user_id = ? 
+        ORDER BY created_at DESC
+        """,
+        (user["id"],),
+    ).fetchall()
+
+    return render_template("profile.html", profile_user=user, posts=posts)

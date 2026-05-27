@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, session, flash, jso
 from werkzeug.security import generate_password_hash, check_password_hash
 import requests
 import db
+import os
 from db import get_db
 from functools import wraps
 from datetime import datetime, timezone
@@ -16,8 +17,9 @@ def login_required(f):
     return decorated
 
 app = Flask(__name__)
-app.secret_key = "dev-secret-change-me"
+app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-change-me")
 db.init_app(app)
+db.init_db(app)
 
 @app.route("/")
 def index():

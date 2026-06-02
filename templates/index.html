@@ -3,7 +3,7 @@
 {% block content %}
     {% if not session.user_id %}
         <p>Welcome to RECORD. One song a day.</p>
-        <p><a href="/register">Get started</a> or <a href="/login">log in</a>.</p>
+        <p><a href="/register" class="cta-link">Get started</a> or <a href="/login" class="cta-link">log in</a>.</p>
 
     {% else %}
         <h2>Today's records</h2>

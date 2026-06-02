@@ -1,70 +1,311 @@
-body {
-    font-family: system-ui, sans-serif;
-    background: #fafafa;
+/* ============ RECORD — dark theme ============ */
+
+:root {
+    --bg: #121212;
+    --surface: #1a1a1a;
+    --surface-hover: #232323;
+    --border: #2a2a2a;
+    --text: #f5f5f5;
+    --text-muted: #a0a0a0;
+    --text-dim: #6b6b6b;
+    --accent: #1ed760;
+    --accent-hover: #1fdf64;
+    --accent-dim: #169c46;
+    --error: #f15e6c;
+    --radius: 6px;
+    --radius-lg: 10px;
+    --max-w: 720px;
+    --gap: 1rem;
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
-#search-input {
-    width: 100%;
-    max-width: 500px;
-    padding: 0.5rem;
-    font-size: 1rem;
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    min-height: 100vh;
+    line-height: 1.5;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--accent);
+}
+
+h1, h2, h3 {
+    margin: 0;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+p {
+    margin: 0 0 1rem;
+    color: var(--text-muted);
+}
+
+p:last-child {
+    margin-bottom: 0;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+/* ============ Layout ============ */
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+header h1 {
+    font-size: 1.25rem;
+    letter-spacing: 0.15em;
+    color: var(--text);
+}
+
+header h1 a {
+    color: inherit;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    font-size: 0.9rem;
+}
+
+nav a {
+    color: var(--text-muted);
+    transition: color 0.15s;
+}
+
+nav a:hover {
+    color: var(--text);
+}
+
+main {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+}
+
+main h2 {
+    font-size: 1.5rem;
     margin-bottom: 1rem;
 }
 
+main h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+}
+
+/* ============ Flash messages ============ */
+
+.flashes {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem;
+    display: grid;
+    gap: 0.5rem;
+}
+
+.flashes li {
+    padding: 0.75rem 1rem;
+    background: var(--surface);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-size: 0.9rem;
+}
+
+/* ============ Forms (auth + post) ============ */
+
+form {
+    display: grid;
+    gap: 0.75rem;
+    max-width: 360px;
+}
+
+label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: -0.25rem;
+}
+
+input[type="text"],
+input[type="password"],
+textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 0.95rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.15s, background 0.15s;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+textarea:focus {
+    border-color: var(--accent);
+    background: var(--surface-hover);
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: var(--text-dim);
+}
+
+button[type="submit"],
+.btn {
+    padding: 0.75rem 1.5rem;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.05s;
+    justify-self: start;
+}
+
+button[type="submit"]:hover,
+.btn:hover {
+    background: var(--accent-hover);
+}
+
+button[type="submit"]:active,
+.btn:active {
+    transform: scale(0.98);
+}
+
+/* ============ Search input ============ */
+
+#search-input {
+    width: 100%;
+    max-width: 100%;
+    padding: 0.85rem 1rem;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    outline: none;
+    transition: border-color 0.15s, background 0.15s;
+}
+
+#search-input:focus {
+    border-color: var(--accent);
+    background: var(--surface-hover);
+}
+
+#search-input::placeholder {
+    color: var(--text-dim);
+}
+
 #search-status {
-    color: #666;
-    margin-bottom: 0.5rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-bottom: 0.75rem;
+    min-height: 1.2em;
 }
 
 #search-results {
     display: grid;
-    gap: 0.75rem;
-    max-width: 600px;
+    gap: 0.25rem;
 }
 
 .search-tile {
     display: flex;
-    gap: 0.75rem;
+    gap: 0.85rem;
     align-items: center;
-    padding: 0.5rem;
-    border-radius: 8px;
+    padding: 0.6rem;
+    border-radius: var(--radius);
     cursor: pointer;
+    transition: background 0.15s;
 }
 
 .search-tile:hover {
-    background: #f4f4f4;
+    background: var(--surface);
 }
 
 .search-tile img {
-    width: 60px;
-    height: 60px;
+    width: 56px;
+    height: 56px;
     border-radius: 4px;
     flex-shrink: 0;
 }
 
 .search-tile-name {
     font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text);
 }
 
 .search-tile-artist {
-    color: #666;
-    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-top: 0.1rem;
 }
 
 .search-tile.selected {
-    background: #1a1a1a;
-    color: white;
+    background: var(--surface-hover);
+    box-shadow: inset 0 0 0 1px var(--accent);
 }
 
-.search-tile.selected .search-tile-artist {
-    color: #aaa;
+.search-tile.selected .search-tile-name {
+    color: var(--accent);
 }
+
+/* ============ Post panel ============ */
 
 #post-panel {
     margin-top: 2rem;
-    padding: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    max-width: 600px;
+    padding: 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+}
+
+#post-panel h3 {
+    margin-bottom: 1rem;
+    color: var(--text);
+}
+
+#post-panel form {
+    max-width: 100%;
 }
 
 #preview-track {
@@ -77,113 +318,136 @@ body {
 #preview-art {
     width: 80px;
     height: 80px;
-    border-radius: 4px;
+    border-radius: var(--radius);
+    flex-shrink: 0;
 }
 
 #preview-name {
     font-weight: 700;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
+    color: var(--text);
 }
 
 #preview-artist {
-    color: #666;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-top: 0.15rem;
 }
 
 #form-note {
     width: 100%;
-    padding: 0.5rem;
-    font-size: 1rem;
-    box-sizing: border-box;
+    padding: 0.75rem 1rem;
+    background: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 0.95rem;
     font-family: inherit;
+    outline: none;
+    resize: vertical;
+    min-height: 80px;
+    transition: border-color 0.15s;
+}
+
+#form-note:focus {
+    border-color: var(--accent);
 }
 
 #char-count {
-    font-size: 0.8rem;
-    color: #666;
+    font-size: 0.75rem;
+    color: var(--text-dim);
     text-align: right;
-    margin-bottom: 0.5rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0.75rem;
 }
+
+/* ============ Feed ============ */
 
 .feed {
     display: grid;
-    gap: 1rem;
-    margin-top: 1rem;
-    max-width: 600px;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
 }
 
 .feed-item {
     display: flex;
     gap: 1rem;
     padding: 1rem;
-    border: 1px solid #eee;
-    border-radius: 8px;
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    transition: background 0.15s;
 }
 
-.feed-item img {
-    width: 80px;
-    height: 80px;
-    border-radius: 4px;
-    flex-shrink: 0;
+.feed-item:hover {
+    background: var(--surface-hover);
 }
 
 .feed-item-body {
     flex: 1;
+    min-width: 0;
 }
 
 .feed-item-username {
-    font-size: 0.8rem;
-    color: #666;
-    margin-bottom: 0.25rem;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 0.4rem;
+}
+
+.feed-item-username a {
+    color: var(--text-muted);
+}
+
+.feed-item-username a:hover {
+    color: var(--accent);
 }
 
 .feed-item-track {
-    font-weight: 600;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--text);
+    margin-bottom: 0.15rem;
+    line-height: 1.3;
 }
 
 .feed-item-artist {
-    color: #666;
-    font-size: 0.9rem;
-}
-
-.feed-item-note {
-    margin-top: 0.5rem;
-    padding: 0.5rem;
-    background: #f7f7f7;
-    border-radius: 4px;
-    font-size: 0.9rem;
-}
-
-.profile-header {
-    margin-bottom: 1.5rem;
-}
-
-.profile-header h2 {
-    margin-bottom: 0.25rem;
-}
-
-.profile-meta {
-    color: #666;
-    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-size: 0.875rem;
 }
 
 .feed-item-date {
-    color: #999;
-    font-size: 0.8rem;
-    margin-top: 0.25rem;
+    color: var(--text-dim);
+    font-size: 0.75rem;
+    margin-top: 0.35rem;
 }
+
+.feed-item-note {
+    margin-top: 0.65rem;
+    padding: 0.65rem 0.85rem;
+    background: var(--bg);
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    line-height: 1.45;
+}
+
+/* ============ Album art + play button ============ */
 
 .feed-art-wrap {
     position: relative;
     width: 80px;
     height: 80px;
     flex-shrink: 0;
+    border-radius: var(--radius);
+    overflow: hidden;
 }
 
 .feed-art-wrap img {
     width: 100%;
     height: 100%;
-    border-radius: 4px;
     display: block;
+    border-radius: 0;
 }
 
 .play-btn {
@@ -192,10 +456,9 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 0, 0.55);
+    background: rgba(0, 0, 0, 0.6);
     border: none;
-    border-radius: 4px;
-    color: white;
+    color: var(--text);
     font-size: 1.5rem;
     cursor: pointer;
     opacity: 0;
@@ -208,6 +471,74 @@ body {
     opacity: 1;
 }
 
+.play-btn:hover {
+    color: var(--accent);
+}
+
 .play-icon {
     line-height: 1;
+    user-select: none;
+}
+
+/* ============ Profile ============ */
+
+.profile-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.profile-header h2 {
+    font-size: 2rem;
+    margin-bottom: 0.25rem;
+    letter-spacing: -0.02em;
+}
+
+.profile-meta {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+/* ============ Mobile ============ */
+
+@media (max-width: 600px) {
+    header {
+        padding: 0.85rem 1rem;
+    }
+
+    nav {
+        gap: 0.85rem;
+        font-size: 0.85rem;
+    }
+
+    main {
+        padding: 1.5rem 1rem 3rem;
+    }
+
+    main h2 {
+        font-size: 1.3rem;
+    }
+
+    .feed-art-wrap,
+    .feed-item img,
+    #preview-art {
+        width: 64px;
+        height: 64px;
+    }
+
+    .feed-item-track {
+        font-size: 0.95rem;
+    }
+}
+
+.cta-link {
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.cta-link:hover {
+    color: var(--accent-hover);
+    text-decoration: underline;
 }

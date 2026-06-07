@@ -5,7 +5,7 @@ import db
 import os
 from db import get_db
 from functools import wraps
-from datetime import datetime, timezone
+from datetime import datetime, timezone, date, timedelta
 
 def login_required(f):
     @wraps(f)
@@ -20,6 +20,15 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-change-me")
 db.init_app(app)
 db.init_db(app)
+
+def display_streak(current_streak, last_post_date_str):
+    if not last_post_date_str:
+        return 0
+    last = date.fromisoformat(last_post_date_str)
+    today = datetime.now(timezone.utc).date()
+    if last == today or last == today - timedelta(days=1):
+        return current_streak
+    return 0
 
 @app.route("/")
 def index():
@@ -192,9 +201,32 @@ def post_record():
             note or None,
         ),
     )
+
+    #streak update
+    today = datetime.now(timezone.utc).date()
+    user = conn.execute(
+        "SELECT current_streak, last_post_date FROM users WHERE id = ?",
+        (session["user_id"],),
+    ).fetchone()
+
+    last = date.fromisoformat(user["last_post_date"]) if user["last_post_date"] else None
+    
+    if last == today - timedelta(days=1):
+        new_streak = user["current_streak"] + 1
+    else:
+        new_streak = 1
+
+    conn.execute(
+        "UPDATE users SET current_streak = ?, last_post_date = ? WHERE id = ?",
+        (new_streak, today.isoformat(), session["user_id"]),
+    )
     conn.commit()
 
-    flash("Your record is posted!")
+    if new_streak == 1:
+        flash("Your record is posted! 🔥 Day 1 - the streak begins.")
+    else:
+        flash("Your record is posted! 🔥 Day {new_streak} - streak alive!")
+
     return redirect("/")
 
 @app.route("/user/<username>")

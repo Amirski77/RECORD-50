@@ -5,7 +5,9 @@ CREATE TABLE users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT NOT NULL UNIQUE,
     password_hash TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    current_streak INTEGER NOT NULL DEFAULT 0,
+    last_post_date TEXT
 );
 
 CREATE TABLE posts (

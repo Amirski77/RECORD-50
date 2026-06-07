@@ -8,6 +8,10 @@
     {% else %}
         <h2>Today's records</h2>
 
+        {% if streak %}
+            <p class="streak">🔥 {{ streak }} days streak</p>
+        {% endif %}
+
         {% if not user_posted_today %}
             <p>You haven't posted yet today. <a href="/search">Pick your song.</a></p>
         {% else %}

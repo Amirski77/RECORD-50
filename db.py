@@ -23,8 +23,17 @@ def init_app(app):
 def init_db(app):
     """Create the database and the tables if they don't exist."""
     with app.app_context():
+        print(f"[init_db] DATA_DIR = {DATA_DIR}", flush=True)
+        print(f"[init_db] DATABASE path = {DATABASE}", flush=True)
+        print(f"[init_db] DATABASE exists: {os.path.exists(DATABASE)}", flush=True)
+        print(f"[init_db] DATA_DIR exists: {os.path.exists(DATA_DIR)}", flush=True)
+        print(f"[init_db] DATA_DIR is dir: {os.path.isdir(DATA_DIR)}", flush=True)
         if not os.path.exists(DATABASE):
+            print(f"[init_db] Creating new database at {DATABASE}", flush=True)
             conn = sqlite3.connect(DATABASE)
             with open("schema.sql") as f:
                 conn.executescript(f.read())
             conn.close()
+            print(f"[init_db] Database created", flush=True)
+        else:
+            print(f"[init_db] Database already exists, skipping schema init", flush=True)

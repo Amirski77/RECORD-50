@@ -21,11 +21,15 @@ app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-change-me")
 db.init_app(app)
 db.init_db(app)
 
+def record_today():
+    # "day" flips at 4am Almaty time (UTC+5)
+    return (datetime.now(timezone.utc)+ timedelta(hours=1)).date()
+
 def display_streak(current_streak, last_post_date_str):
     if not last_post_date_str:
         return 0
     last = date.fromisoformat(last_post_date_str)
-    today = datetime.now(timezone.utc).date()
+    today = record_today()
     if last == today or last == today - timedelta(days=1):
         return current_streak
     return 0
@@ -36,14 +40,14 @@ def index():
         return render_template("index.html")
 
     conn = get_db()
-    today_utc = datetime.now(timezone.utc).date().isoformat()
+    today_utc = record_today().isoformat()
 
     posts = conn.execute(
         """
         SELECT posts.id, posts.track_name, posts.artist_name, posts.album_art_url, posts.preview_url, posts.note, posts.created_at, users.username
         FROM posts
         JOIN users ON posts.user_id = users.id
-        WHERE DATE(posts.created_at) = ?
+        WHERE DATE(posts.created_at, '+1 hour') = ?
         ORDER BY posts.created_at DESC
         """,
         (today_utc,),
@@ -51,7 +55,14 @@ def index():
 
     user_posted_today = any(p["username"] == session["username"] for p in posts)
 
-    return render_template("index.html", posts=posts, user_posted_today=user_posted_today)
+    me = conn.execute(
+        "SELECT current_streak, last_post_date FROM users WHERE id = ?",
+        (session["user_id"],),
+    ).fetchone()
+    streak = display_streak(me["current_streak"], me["last_post_date"])
+
+    return render_template("index.html", posts=posts, user_posted_today=user_posted_today, streak=streak)
+    
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
@@ -176,9 +187,9 @@ def post_record():
 
     conn = get_db()
 
-    today_utc = datetime.now(timezone.utc).date().isoformat()
+    today_utc = record_today().isoformat()
     already_posted = conn.execute(
-        "SELECT id FROM posts WHERE user_id = ? AND DATE(created_at) = ?",
+        "SELECT id FROM posts WHERE user_id = ? AND DATE(created_at, '+1 hour') = ?",
         (session["user_id"], today_utc),
     ).fetchone()
 
@@ -203,7 +214,7 @@ def post_record():
     )
 
     #streak update
-    today = datetime.now(timezone.utc).date()
+    today = record_today()
     user = conn.execute(
         "SELECT current_streak, last_post_date FROM users WHERE id = ?",
         (session["user_id"],),

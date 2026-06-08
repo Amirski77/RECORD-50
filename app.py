@@ -225,7 +225,7 @@ def post_record():
     if new_streak == 1:
         flash("Your record is posted! 🔥 Day 1 - the streak begins.")
     else:
-        flash("Your record is posted! 🔥 Day {new_streak} - streak alive!")
+        flash(f"Your record is posted! 🔥 Day {new_streak} - streak alive!")
 
     return redirect("/")
 

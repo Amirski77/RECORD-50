@@ -9,7 +9,7 @@
         <h2>Today's records</h2>
 
         {% if streak %}
-            <p class="streak">🔥 {{ streak }} days streak</p>
+            <p class="streak">🔥 {{ streak }} day{{ 's' if streak != 1 else '' }} streak</p>
         {% endif %}
 
         {% if not user_posted_today %}

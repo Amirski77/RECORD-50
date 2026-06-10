@@ -292,13 +292,15 @@ def profile(username):
     conn = get_db()
 
     user = conn.execute(
-        "SELECT id, username, created_at FROM users WHERE username = ?",
+        "SELECT id, username, created_at, current_streak, last_post_date FROM users WHERE username = ?",
         (username,)
     ).fetchone()
 
     if user is None:
         flash("User not found")
         return redirect("/")
+
+    profile_streak = display_streak(user["current_streak"], user["last_post_date"])
 
     posts = conn.execute(
         """
@@ -310,4 +312,4 @@ def profile(username):
         (user["id"],),
     ).fetchall()
 
-    return render_template("profile.html", profile_user=user, posts=posts)
+    return render_template("profile.html", profile_user=user, posts=posts, profile_streak=profile_streak)

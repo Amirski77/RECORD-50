@@ -4,6 +4,9 @@
     <div class="profile-header">
         <h2>{{ profile_user.username }}</h2>
         <p class="profile-meta">{{ posts|length }} record{{ "s" if posts|length != 1 else "" }} · joined {{ profile_user.created_at[:10] }}</p>
+        {% if profile_streak %}
+            <p class="profile-streak">🔥 {{ profile_streak }} day {{ "s" if profile_streak != 1 else "" }} streak</p>
+        {% endif %}
     </div>
 
     {% if posts %}

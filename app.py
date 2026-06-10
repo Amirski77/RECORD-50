@@ -67,6 +67,12 @@ def index():
         "SELECT current_streak, last_post_date FROM users WHERE id = ?",
         (session["user_id"],),
     ).fetchone()
+
+    if me is None:
+        session.clear()
+        flash("Session expired. Please log in again.")
+        return redirect("/login")
+
     streak = display_streak(me["current_streak"], me["last_post_date"])
 
     return render_template("index.html", posts=posts, user_posted_today=user_posted_today, streak=streak, reactions=reactions)

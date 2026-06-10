@@ -55,13 +55,21 @@ def index():
 
     user_posted_today = any(p["username"] == session["username"] for p in posts)
 
+    #reaction counts for all posts
+    reaction_rows = conn.execute(
+        "SELECT post_id, type, COUNT(*) as count FROM reactions GROUP BY post_id, type",
+    ).fetchall()
+    reactions ={}
+    for row in reaction_rows:
+        reactions.setdefault(row["post_id"], {})[row["type"]] = row["count"]
+
     me = conn.execute(
         "SELECT current_streak, last_post_date FROM users WHERE id = ?",
         (session["user_id"],),
     ).fetchone()
     streak = display_streak(me["current_streak"], me["last_post_date"])
 
-    return render_template("index.html", posts=posts, user_posted_today=user_posted_today, streak=streak)
+    return render_template("index.html", posts=posts, user_posted_today=user_posted_today, streak=streak, reactions=reactions)
     
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -239,6 +247,39 @@ def post_record():
         flash(f"Your record is posted! 🔥 Day {new_streak} - streak alive!")
 
     return redirect("/")
+
+@app.route("/react", methods=["POST"])
+@login_required
+def react():
+    post_id = request.form.get("post_id", "").strip()
+    reaction_type = request.form.get("type", "").strip()
+
+    valid_types = {"fire", "heart", "sleepy", "poop"}
+    if not post_id or reaction_type not in valid_types:
+        return jsonify({"error": "bad request"}), 400
+
+    conn = get_db()
+
+    #already reacted with this type? remove it
+    existing = conn.execute(
+        "SELECT id FROM reactions WHERE user_id = ? AND post_id = ? AND type = ?",
+        (session["user_id"], post_id, reaction_type),
+    ).fetchone()
+
+    if existing:
+        conn.execute("DELETE FROM reactions WHERE id = ?", (existing["id"],))
+    else:
+        conn.execute("INSERT INTO reactions (user_id, post_id, type) VALUES (?, ?, ?)", (session["user_id"], post_id, reaction_type))
+    conn.commit()
+
+    #return fresh counts for this post so the page can update
+    rows = conn.execute(
+        "SELECT type, COUNT(*) as count FROM reactions WHERE post_id = ? GROUP BY type",
+        (post_id,),
+    ).fetchall()
+    counts = {row["type"]: row["count"] for row in rows}
+
+    return jsonify({"counts": counts})
 
 @app.route("/user/<username>")
 def profile(username):

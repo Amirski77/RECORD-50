@@ -542,3 +542,31 @@ button[type="submit"]:active,
     color: var(--accent-hover);
     text-decoration: underline;
 }
+
+.reactions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.reaction-btn {
+    background: transparent;
+    border: 1px solid #333;
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 0.95rem;
+    color: #ccc;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.reaction-btn:hover {
+    background: #1e1e1e;
+    border-color: #555;
+}
+
+.rcount {
+    margin-left: 2px;
+    font-size: 0.85rem;
+    color: #888;
+}

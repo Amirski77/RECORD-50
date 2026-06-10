@@ -39,6 +39,13 @@
                         {% if post.note %}
                             <div class="feed-item-note">{{ post.note }}</div>
                         {% endif %}
+                        <div class="reactions" data-post-id="{{ post.id }}">
+                            {% set counts = reactions.get(post.id, {}) %}
+                            <button class="reaction-btn" data-type="fire" aria-label="Fire">🔥<span class="rcount">{{ counts.get("fire", '') }}</span></button>
+                            <button class="reaction-btn" data-type="heart" aria-label="Heart">❤️<span class="rcount">{{ counts.get("heart", '') }}</span></button>
+                            <button class="reaction-btn" data-type="sleepy" aria-label="Sleepy">😴<span class="rcount">{{ counts.get("sleepy", '') }}</span></button>
+                            <button class="reaction-btn" data-type="poop" aria-label="Poop">💩<span class="rcount">{{ counts.get("poop", '') }}</span></button>
+                        </div>
                     </div>
                     </article>
                 {% endfor %}

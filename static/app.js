@@ -185,3 +185,31 @@ function resetButton(button) {
 document.querySelectorAll(".play-btn").forEach(btn => {
     btn.addEventListener("click", () => playPreview(btn));
 });
+
+document.querySelectorAll(".reaction-btn").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const bar = btn.closest(".reactions");
+      const postId = bar.dataset.postId;
+      const type = btn.dataset.type;
+  
+      try {
+        const res = await fetch("/react", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: new URLSearchParams({ post_id: postId, type: type }),
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+  
+        // update every button's count in this bar
+        bar.querySelectorAll(".reaction-btn").forEach((b) => {
+          const t = b.dataset.type;
+          const count = data.counts[t] || 0;
+          const span = b.querySelector(".rcount");
+          if (span) span.textContent = count;
+        });
+      } catch (e) {
+        // network error — just ignore for now
+      }
+    });
+  });

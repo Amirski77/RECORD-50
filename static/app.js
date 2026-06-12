@@ -124,6 +124,7 @@ function showPostPanel(track) {
     document.querySelector("#form-artist-name").value = track.artist_name;
     document.querySelector("#form-album-art-url").value = track.album_art_url;
     document.querySelector("#form-preview-url").value = track.preview_url ||"";
+    document.querySelector("#form-apple-music-url").value = track.apple_music_url ||"";
 
     panel.hidden = false;
     panel.scrollIntoView({ behavior: "smooth", block: "start" });

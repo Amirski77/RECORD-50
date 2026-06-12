@@ -44,7 +44,7 @@ def index():
 
     posts = conn.execute(
         """
-        SELECT posts.id, posts.track_name, posts.artist_name, posts.album_art_url, posts.preview_url, posts.note, posts.created_at, users.username
+        SELECT posts.id, posts.track_name, posts.artist_name, posts.album_art_url, posts.preview_url, posts.apple_music_url, posts.note, posts.created_at, users.username
         FROM posts
         JOIN users ON posts.user_id = users.id
         WHERE DATE(posts.created_at, '+1 hour') = ?
@@ -172,6 +172,7 @@ def search():
             "artist_name": track.get("artistName"),
             "album_art_url": track.get("artworkUrl100"),
             "preview_url": track.get("previewUrl"),
+            "apple_music_url": track.get("trackViewUrl"),
         })
 
     return jsonify({"results": results})
@@ -189,6 +190,7 @@ def post_record():
     artist_name = request.form.get("artist_name", "").strip()
     album_art_url = request.form.get("album_art_url", "").strip()
     preview_url = request.form.get("preview_url", "").strip() or None
+    apple_music_url = request.form.get("apple_music_url", "").strip() or None
     note = request.form.get("note", "").strip()
 
     if not (track_id and track_name and artist_name and album_art_url):
@@ -213,8 +215,8 @@ def post_record():
 
     conn.execute(
         """
-        INSERT INTO posts (user_id, track_id, track_name, artist_name, album_art_url, preview_url, note)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO posts (user_id, track_id, track_name, artist_name, album_art_url, preview_url, apple_music_url, note)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         """,
         (
             session["user_id"], 
@@ -222,7 +224,8 @@ def post_record():
             track_name, 
             artist_name, 
             album_art_url, 
-            preview_url, 
+            preview_url,
+            apple_music_url,
             note or None,
         ),
     )

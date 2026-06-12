@@ -39,6 +39,9 @@
                         {% if post.note %}
                             <div class="feed-item-note">{{ post.note }}</div>
                         {% endif %}
+                        {% if post.apple_music_url %}
+                            <a class = "music-link" href="{{ post.apple_music_url }}" target="_blank" rel="noopener">Apple Music</a>
+                        {% endif %}
                         <div class="reactions" data-post-id="{{ post.id }}">
                             {% set counts = reactions.get(post.id, {}) %}
                             <button class="reaction-btn" data-type="fire" aria-label="Fire">🔥<span class="rcount">{{ counts.get("fire", '') }}</span></button>

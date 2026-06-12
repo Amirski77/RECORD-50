@@ -18,6 +18,8 @@ CREATE TABLE posts (
     artist_name TEXT NOT NULL,
     album_art_url TEXT NOT NULL,
     preview_url TEXT,
+    apple_music_url TEXT,
+    spotify_url TEXT,
     note TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id)

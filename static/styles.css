@@ -600,3 +600,22 @@ button[type="submit"]:active,
     height: 16px;
     object-fit: contain;
 }
+
+.music-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    margin-top: 6px;
+    border: 1px solid #333;
+    border-radius: 999px;
+    color: #ccc;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.music-link:hover {
+    background: #1e1e1e;
+    border-color: #555;
+}

@@ -2,7 +2,7 @@
 
 {% block content %}
     <h2>Profile links</h2>
-    <form action="/settings" method="post">
+    <form action="/settings" method="post" class="settings-form">
         <label>Apple Music profile URL</label>
         <input type="url" name="apple_music_profile" placeholder="https://music.apple.com/profile/..."
                value="{{ user.apple_music_profile or '' }}">

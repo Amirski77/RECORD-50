@@ -619,3 +619,37 @@ button[type="submit"]:active,
     background: #1e1e1e;
     border-color: #555;
 }
+
+.settings-form {
+    max-width: 480px;
+}
+
+.settings-form label {
+    display: block;
+    margin-top: 16px;
+    margin-bottom: 6px;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #888;
+}
+
+.settings-form input[type="url"] {
+    width: 100%;
+    padding: 10px 12px;
+    background: #1a1a1d;
+    border: 1px solid #333;
+    border-radius: 8px;
+    color: #eee;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+}
+
+.settings-form input[type="url"]:focus {
+    outline: none;
+    border-color: #666;
+}
+
+.settings-form button {
+    margin-top: 20px;
+}

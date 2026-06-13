@@ -40,7 +40,10 @@
                             <div class="feed-item-note">{{ post.note }}</div>
                         {% endif %}
                         {% if post.apple_music_url %}
-                            <a class = "music-link" href="{{ post.apple_music_url }}" target="_blank" rel="noopener">Apple Music</a>
+                            <a class = "music-link" href="{{ post.apple_music_url }}" target="_blank" rel="noopener">
+                                <img src="{{ url_for('static', filename='apple-music.svg') }}" alt="" class="link-icon">
+                                Apple Music
+                            </a>
                         {% endif %}
                         <div class="reactions" data-post-id="{{ post.id }}">
                             {% set counts = reactions.get(post.id, {}) %}

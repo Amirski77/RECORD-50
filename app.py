@@ -295,7 +295,7 @@ def profile(username):
     conn = get_db()
 
     user = conn.execute(
-        "SELECT id, username, created_at, current_streak, last_post_date FROM users WHERE username = ?",
+        "SELECT id, username, created_at, current_streak, last_post_date, apple_music_profile, spotify_profile FROM users WHERE username = ?",
         (username,)
     ).fetchone()
 
@@ -316,3 +316,24 @@ def profile(username):
     ).fetchall()
 
     return render_template("profile.html", profile_user=user, posts=posts, profile_streak=profile_streak)
+
+@app.route("/settings", methods=["GET", "POST"])
+@login_required
+def settings():
+    conn = get_db()
+    if request.method == "POST":
+        apple = request.form.get("apple_music_profile", "").strip() or None
+        spotify = request.form.get("spotify_profile", "").strip() or None
+        conn.execute(
+            "UPDATE users SET apple_music_profile = ?, spotify_profile = ? WHERE id = ?",
+            (apple, spotify, session["user_id"]),
+        )
+        conn.commit()
+        flash("Profile links updated")
+        return redirect("/user/" + session["username"])
+
+    user = conn.execute(
+        "SELECT apple_music_profile, spotify_profile FROM users WHERE id = ?",
+        (session["user_id"],),
+    ).fetchone()
+    return render_template("settings.html", user=user)

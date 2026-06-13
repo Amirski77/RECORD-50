@@ -7,7 +7,9 @@ CREATE TABLE users (
     password_hash TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     current_streak INTEGER NOT NULL DEFAULT 0,
-    last_post_date TEXT
+    last_post_date TEXT,
+    apple_music_profile TEXT,
+    spotify_profile TEXT
 );
 
 CREATE TABLE posts (

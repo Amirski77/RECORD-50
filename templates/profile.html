@@ -7,6 +7,19 @@
         {% if profile_streak %}
             <p class="profile-streak">🔥 {{ profile_streak }} day {{ "s" if profile_streak != 1 else "" }} streak</p>
         {% endif %}
+    <div class="profile-links">
+         {% if profile_user.apple_music_profile %}
+            <a href="{{ profile_user.apple_music_profile }}" target="_blank" rel="noopener">
+                <img src="{{ url_for('static', filename='apple-music.svg') }}" alt="" class="link-icon">
+                Apple Music
+            </a>
+         {% endif %}
+         {% if profile_user.spotify_profile %}
+            <a href="{{ profile_user.spotify_profile }}" target="_blank" rel="noopener">
+                <img src="{{ url_for('static', filename='spotify.png') }}" alt="" class="link-icon">
+                Spotify
+            </a>
+         {% endif %}
     </div>
 
     {% if posts %}

@@ -570,3 +570,33 @@ button[type="submit"]:active,
     font-size: 0.85rem;
     color: #888;
 }
+
+.profile-links {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.profile-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border: 1px solid #333;
+    border-radius: 999px;
+    color: #ccc;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.profile-links a:hover {
+    background: #1e1e1e;
+    border-color: #555;
+}
+
+.link-icon {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+}

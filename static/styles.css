@@ -499,6 +499,12 @@ button[type="submit"]:active,
     font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
+    margin-top: 0;
+    margin-bottom: 8px;
+}
+
+.profile-streak {
+    margin-top: 6px;
 }
 
 /* ============ Mobile ============ */
@@ -574,7 +580,8 @@ button[type="submit"]:active,
 .profile-links {
     display: flex;
     gap: 12px;
-    margin-top: 8px;
+    margin-top: 12px;
+    margin-bottom: 14px;
 }
 
 .profile-links a {

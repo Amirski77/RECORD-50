@@ -1,10 +1,8 @@
-from flask import Flask, render_template, request, redirect, session, flash, jsonify
+from flask import Flask, render_template, request, redirect, session, flash, jsonify, Response
 from werkzeug.security import generate_password_hash, check_password_hash
 import requests
 import db
 import os
-import json
-from flask import Response
 from db import get_db
 from functools import wraps
 from datetime import datetime, timezone, date, timedelta
@@ -205,18 +203,23 @@ def logout():
 
 @app.route("/.well-known/apple-app-site-association")
 def aasa():
-    return Response(
-        json.dumps({
-            "applinks": {
-                "apps": [],
-                "details": [{
-                    "appID": "X6TN24D6GG.live.recordapp.RECORD",
-                    "paths": ["/i/*"]
-                }]
-            }
-        }),
-        mimetype="application/json"
-    )
+    aasa_json = '''{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["X6TN24D6GG.live.recordapp.RECORD"],
+        "components": [
+          { "/": "/i/*", "comment": "Invite links" }
+        ]
+      }
+    ]
+  }
+}'''
+    return Response(aasa_json, mimetype="application/json")
+
+@app.route("/i/<code>")
+def invite(code):
+    return render_template("invite.html", code=code)
 
 @app.route("/api/search")
 def search():

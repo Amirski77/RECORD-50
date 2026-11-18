@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h2>You're invited to RECORD</h2>
+
+<p>Open this link on an iPhone with the RECORD app installed to accept the invite.</p>
+
+<p>Invite code: <strong>{{ code }}</strong></p>
+
+{% if not session.user_id %}
+<p>Don't have an account yet? <a href="/register">Register</a> or <a href="/login">log in</a>.</p>
+{% endif %}
+{% endblock %}
